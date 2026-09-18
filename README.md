@@ -12,7 +12,7 @@ New imports added.
 **Safe Password**
 If the user has an special character or many special characters in the password of SQL line 28 is to solve that issue. 
 **Environment path** Added an env_path to solve the issue of connecting the code chain of SQL and FastAPI.
-**Raw Port Integration** Added raw_port to also solve a connection error, in cases in which your env file matches the same variable name in the main code but when trying to run it returns an Error this line solve the port connection issue.
+**Raw Port Integration** Added raw_port to also solve a connection error, in cases in which your env file matches the same variable name in the main code but when trying to run it,  it returns an Error because the port that is being used needs to be cleaned, that's what cause the connection error.
 
 **Note: Version 1.0.0**
 
