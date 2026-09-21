@@ -1,4 +1,4 @@
-# 🏦 BIM
+# 🏦 B.I.M.
 
 **Note: Developing in progress**
 
