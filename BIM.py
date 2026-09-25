@@ -2,7 +2,8 @@ import os
 from typing import Optional, List
 from contextlib import asynccontextmanager
 from pathlib import Path
-
+from datetime import datetime
+from enum import Enum
 
 
 
@@ -82,6 +83,23 @@ class InventoryItem(SQLModel, table=True):
     stock_quantity: int = Field(default=0)
     unit_price: float
     location: Optional[str] = None
+
+# Defining Transaction Type
+class TransactionType(str, Enum):
+    IN = "IN"
+    OUT = "OUT"
+
+#Transaction model
+class InventioryTransaction(SQLModel, table=True):
+    __tablename__ = "inventory_transactions"
+
+    transaction_id: Optional[int] = Field(default=None, primary_key=True)
+    item_id: int = Field(foreign_key="inventory.item_id")
+    transaction_type: TransactionType
+    quantity: int
+    trasaction_dat: datetime = Field(default_factory=datetime.utcnow)
+    user_reference: Optional[str] = None
+
 
 
 #Life Cycle management
