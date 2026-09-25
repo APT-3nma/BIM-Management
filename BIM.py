@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 
-import faker
+
 # Data base and models.
 from sqlmodel import SQLModel, Field, Session, create_engine, select
 from typing import Optional, List
@@ -55,13 +55,33 @@ engine = create_engine(DATABASE_URL, echo=True)
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
 
-#Model base for inventory data
-class Product(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    name: str = Field(index=True)
+# Categories table
+class Category(SQLModel, table=True):
+    __tablename__ = "categories"
+    category_id:Optional[int] = Field(default=None, primary_key=True)
+    name: str
     description: Optional[str] = None
-    price: float
-    quantity: int = 0
+
+# Suppliers table
+class Supplier(SQLModel, table=True):
+    __tablename__ = "suppliers"
+    supplier_id: Optional[int] = Field(default=None, primary_key=True)
+    name: str
+    contact_email: Optional[str] = None
+    phone: Optional[str] = None
+
+#Model base for inventory data
+class InventoryItem(SQLModel, table=True):
+    __tablename__ = "inventory"
+
+    item_id: Optional[int] = Field(default=None, primary_key=True)
+    sku: str = Field(unique=True, index=True)
+    name: str = Field(index=True)
+    category_id: Optional[int] = Field(default=None, foreign_key="categories.category_id")
+    supplier_id: Optional[int] = Field(default=None, foreign_key="suppliers.supplier_id")
+    stock_quantity: int = Field(default=0)
+    unit_price: float
+    location: Optional[str] = None
 
 
 #Life Cycle management
@@ -76,17 +96,17 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-@app.post("/product/", status_code=status.HTTP_201_CREATED)
-def create_product(product: Product):
+@app.post("/items/", status_code=status.HTTP_201_CREATED)
+def create_item(item: InventoryItem):
     with Session(engine) as session:
-        session.add(product)
+        session.add(item)
         session.commit()
-        session.refresh(product)
-        return product
+        session.refresh(item)
+        return item
 
 
-@app.get("/products/", response_model=list[Product])
-def get_products():
+@app.get("/items/", response_model=list[InventoryItem])
+def get_items():
     with Session(engine) as session:
-        products = session.exec(select(Product)).all()
-        return products
+        items = session.exec(select(InventoryItem)).all()
+        return items
