@@ -26,6 +26,12 @@ If the user has an special character or many special characters in the password 
 **New Imports to keep track of the date and times of each transaction.** We forgot to add this earlier.
 
 
+**Update:**
+**requirements.txt** This file store all the requirements in order to make the main code work to activate the dependencies once every file is downloaded, in the terminal write "pip install -r requirements.txt"
+
+
+**Update:** The SQL Schema is now available. 
+
 
 **Version 1.0.2 in progress**
 
